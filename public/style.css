@@ -1,0 +1,15 @@
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+#lineup {
+  display: flex;
+  height: 100vh;
+}
+
+#lineup > div {
+  flex: 1 1 auto;
+}
