@@ -211,9 +211,10 @@ svg.append("line")
                 <div className="row" style={{ border: '2px solid black', padding: '15px', borderRadius: '5px', position: 'relative' }}>
                     {/* Close button in the top right corner */}
                     
-                    <div className="col-3">
+                    <div className="col-4">
                         {/* Title above the table */}
-                        <h3>{this.props.selectedKey}</h3>
+                        <h3>Scoring for {this.props.selectedKey}</h3>
+                        <p>Higher scores reflect bigger preferance to the item.</p>
                         <div style={{ maxHeight: '800px', overflowY: 'auto' }}>
                             <table id="scoreTable" className="table table-sm">
                                 <thead>
@@ -237,9 +238,10 @@ svg.append("line")
                         <button className="btn btn-danger btn-sm mt-3" type="button" onClick={this.resetScores}>Reset Scores</button>  
                         </div>             
                     </div>
-                    <div className="col-9">
+                    <div className="col-8">
                         {/* Title above the SVG visualization */}
-                        <h3 className="text-center mb-4" style={{ paddingRight: '250px', paddingLeft:'100px'}} >Scoring for {this.props.selectedKey}</h3>
+                        <h5 className="text-center mt-5 mb-1" style={{ display: 'flex', justifyContent: 'center'}} >Apply preferance score on the scale 0 to 1</h5>
+                        
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <svg ref={this.svgRef}></svg>
                         </div>

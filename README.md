@@ -15,7 +15,7 @@ A web-based tool that allows users to visualize and score job criteria based on 
    git clone https://github.com/rops0x/jobranking.git
 
 2. Navigate to the project directory:
-   cd job-ranking-tool
+   cd job-ranking
 
 3. Install the required dependencies:
    npm install

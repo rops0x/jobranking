@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Company Name",
+        "description": "The official name of the company or organization offering the job position."
+    },
+    {
+        "name": "Job Title",
+        "description": "The title of the job position, indicating the role or responsibility within the organization."
+    },
+    {
+        "name": "Salary",
+        "description": "The monthly compensation, in euros, that the employee will receive for their work."
+    },
+    {
+        "name": "Travel Time",
+        "description": "The estimated time, in negative minutes, it takes for an employee to travel from home to the workplace."
+    },
+    {
+        "name": "Skill Fit",
+        "description": "A qualitative measure indicating how well an applicant's skills align with the job requirements. It is categorized as 'Poor', 'Average', or 'Excellent'."
+    },
+    {
+        "name": "Number Of Holidays",
+        "description": "The total number of paid holidays that an employee is entitled to in a year."
+    },
+    {
+        "name": "Company Prestige",
+        "description": "A qualitative assessment of the company's reputation and standing in the industry, categorized as 'Low', 'Medium', or 'High'."
+    },
+    {
+        "name": "Benefits",
+        "description": "A qualitative measure of the additional perks and advantages provided to the employee, rated as 'Poor', 'Fair', 'Good', 'Very Good', or 'Excellent'."
+    }
+]
