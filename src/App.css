@@ -41,5 +41,55 @@
   width: 100%;
 }
 
+/* Add this CSS to your App.css file */
 
+.flex-container {
+  display: flex;
+  align-items: flex-start; /* Align items at the start of the container */
+}
 
+/* Optional: Add some spacing between the Dropdown and ScoringVisualization */
+.flex-container > *:not(:last-child) {
+  margin-right: 20px;
+}
+
+.custom-tooltip {
+  --bs-tooltip-bg: var(--bd-violet-bg);
+  --bs-tooltip-color: var(--bs-white);
+}
+
+.placeholder {
+  color: #999; /* Gray color */
+  font-style: italic;
+}
+
+#rankcon {
+  margin: 0px;
+}
+
+/* Add this CSS to your component's CSS file or styles */
+.table-cell-colored {
+  background-color: var(--score-color, blue); /* Default color is blue */
+}
+
+/* Styles for the bar appearance */
+.bar-cell {
+  position: relative;
+  padding: 0;
+  color: black; /* Default text color is black */
+}
+
+.bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--score-width, 50%); /* Initialize width to 0% */
+  background-color: lightblue;
+  opacity: 0.3;
+}
+
+/* Text color for contrasting backgrounds */
+.bar-cell.contrast-text-light {
+  color: white; /* White text for light backgrounds */
+}

@@ -1,34 +1,58 @@
 [
-    {
-        "name": "Company Name",
-        "description": "The official name of the company or organization offering the job position."
-    },
-    {
-        "name": "Job Title",
-        "description": "The title of the job position, indicating the role or responsibility within the organization."
-    },
-    {
-        "name": "Salary",
-        "description": "The monthly compensation, in euros, that the employee will receive for their work."
-    },
-    {
-        "name": "Travel Time",
-        "description": "The estimated time, in negative minutes, it takes for an employee to travel from home to the workplace."
-    },
-    {
-        "name": "Skill Fit",
-        "description": "A qualitative measure indicating how well an applicant's skills align with the job requirements. It is categorized as 'Poor', 'Average', or 'Excellent'."
-    },
-    {
-        "name": "Number Of Holidays",
-        "description": "The total number of paid holidays that an employee is entitled to in a year."
-    },
-    {
-        "name": "Company Prestige",
-        "description": "A qualitative assessment of the company's reputation and standing in the industry, categorized as 'Low', 'Medium', or 'High'."
-    },
-    {
-        "name": "Benefits",
-        "description": "A qualitative measure of the additional perks and advantages provided to the employee, rated as 'Poor', 'Fair', 'Good', 'Very Good', or 'Excellent'."
-    }
+  {
+    "name": "JobTitle",
+    "description": "The title or designation of the job position."
+  },
+  {
+    "name": "Company",
+    "description": "The name of the company or organization offering the position."
+  },
+  {
+    "name": "Salary",
+    "description": "The gross monthly salary for the job in euros or dollar depending on the location."
+  },
+  {
+    "name": "SkillFit",
+    "description": "A numerical representation (1 to 5) indicating how well an individual's skills align with the job requirements."
+  },
+  {
+    "name": "Location",
+    "description": "The city or region where the job is located."
+  },
+  {
+    "name": "CompanyType",
+    "description": "The type or category of the company, such as 'Pharmaceutical' or 'Biotechnology'."
+  },
+  {
+    "name": "MainTask",
+    "description": "The primary responsibilities and tasks expected to be performed in the role."
+  },
+  {
+    "name": "CompanyValues",
+    "description": "The core principles or ethos that the company upholds and promotes."
+  },
+  {
+    "name": "Industry",
+    "description": "The sector or field in which the company operates."
+  },
+  {
+    "name": "WorkLifeBalance",
+    "description": "An assessment of the balance between work and personal time that the role allows."
+  },
+  {
+    "name": "Flexibility",
+    "description": "Information on the flexibility of the job's working conditions, such as 'Hybrid' or 'Remote'."
+  },
+  {
+    "name": "Time",
+    "description": "The type of employment in terms of time commitment, e.g., 'Full-time' or 'Part-time'."
+  },
+  {
+    "name": "BenefitsPackage",
+    "description": "A brief summary of the additional perks or advantages provided by the company aside from the salary."
+  },
+  {
+    "name": "ReputationOfTheCompany",
+    "description": "A description or statement about the company's standing or achievements in its industry."
+  }
 ]

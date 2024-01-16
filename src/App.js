@@ -1,251 +1,172 @@
-import React, { Component } from 'react';
-import {LineUp, LineUpW ,LineUpStringColumnDesc, LineUpNumberColumnDesc, LineUpRanking ,LineUpCategoricalColumnDesc, LineUpAllColumns, ILineUpRankingProps, LineUpImposeColumn, LineUpSupportColumn, LineUpColumn, LineUpWeightedSumColumn,LineUpWeightedColumn } from 'lineupjsx';
-import './App.css';
-import jobsData from './jobsdata.json';
-import ScoringVisualization from './components/ScoringVisualization';
-import Dropdown from './components/dropdown';
-import criterias from './criterias.json';
-
-const colwidthnr = 150;
-const colwidthcat = 100;
-const colwidthstr = 150;
-
-const generateLineUpColumns = (data) => {
-  if (!data || data.length === 0) return [];
-
-  const firstItem = data[0];
-  const columns = [];
-  let numericColumnCount = 0; // Counter for numeric columns
-
-  // Array of colors
-  const colors = [
-    '#3C91E6', // Original colors
-    '#9FD356',
-    '#342E37',
-    '#FA824C',
-    '#D8315B', // New colors with different hues but similar tones
-    '#6A0573',
-    '#2F9599',
-    '#F29E4C'
-  ];
-  
-
-  for (let key in firstItem) {
-      if (typeof firstItem[key] === 'string') {
-          const uniqueValues = new Set(data.map(item => item[key]));
-          if (uniqueValues.size === data.length) {
-              columns.push(<LineUpStringColumnDesc key={key} column={key} label={key} width={colwidthstr} />);
-          } else {
-              columns.push(<LineUpCategoricalColumnDesc key={key} column={key} label={key} width={colwidthcat} />);
-          }
-      } else if (typeof firstItem[key] === 'number') {
-          // Compute the min and max values for the numeric column
-          const minVal = Math.min(...data.map(item => item[key]));
-          const maxVal = Math.max(...data.map(item => item[key]));
-
-          // Get a color from the colors array based on the numericColumnCount
-          const color = colors[numericColumnCount % colors.length];
-
-          columns.push(<LineUpNumberColumnDesc key={key} column={key} domain={[minVal, maxVal]} color={color} width={colwidthnr} />);
-
-          numericColumnCount++;
-      } // Add more conditions for other data types if needed
-  }
-console.log (columns)
-  return columns;
-};
-
-
-
-class LineUpComponent extends Component {
-  componentDidUpdate(prevProps) {
-    if (this.props.data !== prevProps.data) {
-      console.log("Data updated in LineUpComponent");
-    }
-  }
-
-  render() {
-    const columns = generateLineUpColumns(this.props.data);
-    return (
-      <div id='main'>
-      <div id="lineup">
-        <LineUp 
-          data={this.props.data}
-          sidePanel= {true} 
-          sidePanelCollapsed
-          rowPadding={5}
-          rowHeight={30} 
-          defaultRanking
-           
-        >
-          {columns}
-          <LineUpRanking sortBy='Salary:ssc'>
-            <LineUpSupportColumn type="*" />
-            <LineUpColumn column="*" />
-            <LineUpImposeColumn label='tere' column='Salary' colorColumn='Benefits' />
-            <LineUpWeightedSumColumn label='Salary+TravelTime' numberColumn1='Salary' weight1='0.5'  numberColumn2='TravelTime' weight2='0.5'/>
-          </LineUpRanking>                    
-        </LineUp>
-        
-      </div>
-      <div id="lineup2">
-        <LineUp 
-          data={this.props.data}
-          sidePanel= {true} 
-          sidePanelCollapsed
-          rowPadding={5}
-          rowHeight={30} 
-          defaultRanking
-          impo 
-        >
-          {columns}
-          <LineUpRanking sortBy='Salary:ssc'>
-            <LineUpSupportColumn type="*" />
-            <LineUpColumn column="*" />
-            
-          </LineUpRanking>                    
-        </LineUp>
-        
-      </div>
-      </div>
-      
-    );
-  }
-}
-
-
-// LineUp column modifications -> WeightedSum not working
-//<LineUpImposeColumn label='tere' column='Salary' colorColumn='Benefits' />
-//<LineUpWeightedSumColumn label='Salary+TravelTime' numberColumn1='Salary' weight1='0.5'  numberColumn2='TravelTime' weight2='0.5'/>
-
+import React, { Component } from "react";
+import "./App.css";
+import jobsDataStatic from "./jobsdata.json";
+import ScoringVisualization from "./components/ScoringVisualization";
+import Dropdown from "./components/dropdown";
+import LineUp from "./components/LineUpView";
+import CriteriaTabs from "./components/CriteriaTabs";
+import Profile from "./components/Profile";
 
 class App extends Component {
   state = {
     selectedKey: null,
-    jobsData: jobsData,
+    jobsData: jobsDataStatic,
     showVisualization: false,
-    activeTab: criterias.length > 0 ? criterias[0].name : '', // Set the first tab as active by default
-    resetDropdown: false
   };
 
   handleDropdownSelect = (key) => {
-    this.setState({ 
-        selectedKey: key,
-        showVisualization: true  // Show the visualization again
+    this.setState({
+      selectedKey: key,
+      showVisualization: true, // Show the visualization again
     });
-}
+  };
 
-handleCloseVisualization = () => {
-  this.setState((prevState) => ({ 
-      showVisualization: false,
-      resetDropdown: !prevState.resetDropdown  // Toggle the resetDropdown state
-  }));
-}
+  handleCloseVisualization = () => {
+    this.setState({ showVisualization: false });
+  };
 
-handleAddScores = (scores) => {
-  const updatedJobsData = jobsData.map(job => {
-    if (scores[job[this.state.selectedKey]]) {
-      job[`${this.state.selectedKey}Score`] = scores[job[this.state.selectedKey]];
-    }
-    return job;
-  });
-  this.setState((prevState) => ({ 
-    jobsData: updatedJobsData,
-    resetDropdown: !prevState.resetDropdown  // Toggle the resetDropdown state
-}), () => {
-    this.handleCloseVisualization();
-});
-};
+  handleAddScores = (scores) => {
+    //console.log("Selected key show " + this.state.selectedKey)
 
-handleTabClick = (tabName) => {
-  this.setState({ activeTab: tabName });
-}
+    const updatedJobsData = this.state.jobsData.map((job) => {
+      if (scores[job[this.state.selectedKey]] !== null) {
+        job[`${this.state.selectedKey}Score`] =
+          scores[job[this.state.selectedKey]];
+      }
+      return job;
+    });
 
-renderCriteriaTabs() {
-  const { activeTab } = this.state;
-
-  if (!criterias || criterias.length === 0) return null;
-
-  return (
-    <div>
-      <ul className="nav nav-tabs mt-3">
-        {criterias.map((criteria) => (
-          <li className="nav-item" key={criteria.name}>
-            <a 
-              className={`nav-link ${activeTab === criteria.name ? 'active' : ''}`} 
-              onClick={() => this.handleTabClick(criteria.name)}
-            >
-              {criteria.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div className="tab-content mt-2">
-        {criterias.map((criteria) => (
-          <div 
-            className={`tab-pane fade ${activeTab === criteria.name ? 'show active' : ''}`} 
-            key={criteria.name}
-          >
-            <p>{criteria.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+    this.setState({ jobsData: updatedJobsData });
+  };
 
   render() {
+    console.log("APP rendered");
     return (
-      <React.Fragment>
-        <div style={{ margin: '64px' }}>
-        <h1 className="mt-5 text-center mb-5">Job Ranking Tool</h1>
-        {/* Added the introduction here */}
-        <div className="introduction container">
-          <div className="row">
-            <div className="col-lg-5"> {/* Adjust the column size as needed */}
-              <p>Welcome to our Job Ranking Tool! We are dedicated to helping you find a job opportunity that is best suited for you. In the complex world of job hunting, we aim to simplify your search and offer personalized results that match your skills, experience, and preferences.</p>
-              
-              <p>What makes our tool unique is the ability to customize the job ranking based on specific criteria. You can apply your importance score to each criterion, ensuring that the displayed job opportunities align with your individual needs and preferences. It’s all about personalization and ensuring that your job search is as targeted and efficient as possible.</p>
-            </div>
-          </div>
-        </div>
-        
-          <div className="mt-5" style={{ border: '2px solid black', padding: '15px', borderRadius: '5px', position: 'relative' }}>
-            <h2>Job Ranking</h2>
-            
-            <div className="row">
-              <div className="col-lg-6">
-                <p>Below, you will find a Job Ranking section where 10 selected jobs are displayed. These job opportunities are curated from actual job postings, offering you real and attainable options to consider for your next career move.</p>             
+      <div className="container-fluid bg-light">
+        <h1 className="mt-5" style={{ textAlign: "left" }}>
+          Job Ranking Tool
+        </h1>
+
+        {/* Use the CriteriaTabs component */}
+
+        <div className="container-fluid mt-3" style={{}}>
+          <div className="row gx-3">
+            {" "}
+            {/* Added Bootstrap row and no-gutters class to remove padding */}
+            <div className="col-md-2" style={{}}>
+              {" "}
+              {/* Adjusted to 1/3 of the container width */}
+              <Profile />
+              <div className="card mt-2" style={{ width: "" }}>
+                <div className="card-header">
+                  <span style={{ marginRight: "4px" }}>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="darkgrey"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle cx="5" cy="12" r="4" />
+                      <circle cx="10" cy="4" r="4" />
+                      <circle cx="15" cy="12" r="4" />
+                    </svg>
+                  </span>
+                  Preference Score
+                </div>
+
+                <div className="card-body">
+                  <h5 className="card-title">
+                    Include
+                    <span style={{ marginRight: "4px", marginLeft: "4px" }}>
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="darkgrey"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle cx="5" cy="12" r="4" />
+                        <circle cx="10" cy="4" r="4" />
+                        <circle cx="15" cy="12" r="4" />
+                      </svg>
+                    </span>
+                    non-numeric criteria in ranking as a number
+                    <span style={{ color: "darkgrey" }}> #</span>
+                  </h5>
+
+                  <p className="card-text">
+                    Select a criteria to create a Preference Score for
+                    non-numeric criteria.
+                  </p>
+                  <Dropdown
+                    data={this.state.jobsData}
+                    onSelect={this.handleDropdownSelect}
+                  />
+
+                  <button
+                    className="btn btn-outline-info mt-2"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#scoringDescription"
+                    aria-expanded="false"
+                    aria-controls="scoringDescription"
+                  >
+                    Read More
+                  </button>
+                  <div className="collapse mt-1" id="scoringDescription">
+                    <div className="card card-body">
+                      {/* Insert the provided description here */}
+                      <p>
+                        Including qualitative criteria in the ranking as number
+                        can give you a better understanding how much it affects
+                        your decision and its significance to you.{" "}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              
-              {/* Added another column here for the Dropdown */}
-              
             </div>
-
-            
-
-            <div className='mb-5'>
-              {this.renderCriteriaTabs()}
-            </div>
-            <div className="col-lg-6 mb-3">
-          <Dropdown 
-            data={jobsData} 
-            onSelect={this.handleDropdownSelect} 
-            reset={this.state.resetDropdown}
-          />
-            </div>
-              {this.state.showVisualization && 
-              <ScoringVisualization 
-                  data={jobsData} 
+            <div className="col-md-10">
+              <CriteriaTabs /> {/* Adjusted to 2/3 of the container width */}
+              {this.state.showVisualization && (
+                <ScoringVisualization
+                  data={this.state.jobsData}
                   selectedKey={this.state.selectedKey}
                   onAddScores={this.handleAddScores}
                   onClose={this.handleCloseVisualization}
-              />
-            }
-            <LineUpComponent data={this.state.jobsData} />
+                />
+              )}
+              <div
+                style={{
+                  marginTop: "24px",
+                  marginBottom: "24px",
+                  padding: "24px",
+                  border: "1px solid lightgrey",
+                  borderRadius: "9px",
+                  background: "white",
+                }}
+              >
+                <h3 className="">Jobs List</h3>
+                <p
+                  style={{
+                    borderBottom: "1px solid lightgrey",
+                    paddingBottom: "8px",
+                  }}
+                >
+                  <em>
+                    Manipulate the visualization to find your prefered job.{" "}
+                  </em>
+                </p>
+                <LineUp
+                  data={this.state.jobsData}
+                  sel={this.state.selectedKey}
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
